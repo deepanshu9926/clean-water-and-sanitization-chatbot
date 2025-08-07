@@ -1,0 +1,968 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blue Guardian - Marine Solutions</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* CSS Reset and Global Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --color-primary: #1F75FE; /* Fresh Blue */
+            --color-secondary: #0050B3; /* Darker Blue */
+            --color-light: #E9F4FF; /* Very Light Blue */
+            --color-dark: #1A232F; /* Deep Navy Charcoal */
+            --color-white: #FFFFFF;
+            --font-serif: 'Poppins', sans-serif;
+            --font-sans: 'Inter', sans-serif;
+            --chat-bubble-radius: 20px;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-sans);
+            background: linear-gradient(180deg, var(--color-light) 0%, var(--color-white) 50%, var(--color-light) 100%);
+            color: var(--color-dark);
+            line-height: 1.6;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(31, 117, 254, 0.4); }
+            70% { transform: scale(1.1); box-shadow: 0 0 0 10px rgba(31, 117, 254, 0); }
+            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(31, 117, 254, 0); }
+        }
+
+        @keyframes typing {
+            0%, 60%, 100% { transform: translateY(0); }
+            30% { transform: translateY(-5px); }
+        }
+
+        @keyframes bubble-pop-in {
+            0% { transform: scale(0.5); opacity: 0; }
+            80% { transform: scale(1.1); opacity: 1; }
+            100% { transform: scale(1); }
+        }
+        
+        /* Header */
+        header {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+            background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-dark) 100%);
+            color: var(--color-white);
+            overflow: hidden;
+        }
+        
+        .header-bg-animation {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            /* Simple animated water effect with texture */
+            background-image: 
+                url("data:image/svg+xml,%3Csvg width='6' height='6' viewBox='0 0 6 6' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.15' fill-rule='evenodd'%3E%3Cpath d='M5 0h1L0 6V5zm1 6v-1L1 0h1L6 5v1z'/%3E%3C/g%3E%3C/svg%3E"), 
+                radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.1) 0, rgba(255, 255, 255, 0) 70%);
+            animation: move-bg 20s infinite linear;
+        }
+
+        @keyframes move-bg {
+            0% { background-position: 0 0; }
+            100% { background-position: 100% 100%; }
+        }
+
+        header .content {
+            position: relative;
+            z-index: 2;
+            padding: 20px;
+        }
+
+        header h1 {
+            font-family: var(--font-serif);
+            font-size: 5rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            letter-spacing: 2px;
+            animation: fadeIn 1.2s ease-out;
+        }
+
+        header p {
+            font-size: 1.5rem;
+            font-weight: 300;
+            color: var(--color-secondary);
+            margin-bottom: 40px;
+            animation: fadeIn 1.5s ease-out;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: var(--color-secondary);
+            color: var(--color-white);
+            padding: 15px 40px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            animation: fadeIn 1.8s ease-out;
+        }
+
+        .cta-button:hover {
+            background: var(--color-white);
+            color: var(--color-dark);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Nav */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 80px;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 15px rgba(31, 117, 254, 0.1);
+            z-index: 100;
+            transition: background 0.3s ease;
+        }
+
+        .logo {
+            font-family: var(--font-serif);
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--color-primary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-icon {
+            font-size: 1.8rem;
+            color: var(--color-secondary);
+        }
+
+        .nav-links {
+            display: flex;
+            list-style-type: none;
+            gap: 40px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--color-primary);
+            font-weight: 500;
+            position: relative;
+            padding: 5px 0;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--color-primary);
+            transform: scaleX(0);
+            transform-origin: right;
+            transition: transform 0.3s ease-out;
+        }
+
+        .nav-links a:hover::after {
+            transform: scaleX(1);
+            transform-origin: left;
+        }
+
+        /* Main Sections */
+        main {
+            padding: 120px 80px;
+            max-width: 1400px;
+            margin: auto;
+        }
+
+        section {
+            margin-bottom: 120px;
+            animation: fadeIn 1s ease-out;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 80px;
+            align-items: center;
+            background-color: var(--color-white);
+            padding: 50px;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(31, 117, 254, 0.05);
+            transition: all 0.4s ease;
+        }
+        
+        section:hover {
+            box-shadow: 0 15px 50px rgba(31, 117, 254, 0.1);
+            transform: translateY(-5px);
+        }
+
+        .text-content {
+            padding-right: 40px;
+        }
+
+        .image-content {
+            padding-left: 40px;
+        }
+
+        .alt-section .text-content {
+            padding-right: 0;
+            padding-left: 40px;
+        }
+        
+        .alt-section .image-content {
+            padding-left: 0;
+            padding-right: 40px;
+        }
+        
+        h2 {
+            font-family: var(--font-serif);
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--color-dark);
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 70px;
+            height: 4px;
+            background: var(--color-secondary);
+            border-radius: 2px;
+        }
+
+        .alt-section h2::after {
+            left: auto;
+            right: 0;
+        }
+
+        .text-content p {
+            font-size: 1.1rem;
+            color: var(--color-primary);
+            margin-bottom: 20px;
+        }
+
+        .feature-list {
+            list-style: none;
+            margin-top: 30px;
+        }
+
+        .feature-list li {
+            font-size: 1rem;
+            color: var(--color-dark);
+            margin-bottom: 15px;
+            position: relative;
+            padding-left: 30px;
+        }
+
+        .feature-list li::before {
+            content: "\f00c"; /* Font Awesome checkmark */
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            color: var(--color-primary);
+            position: absolute;
+            left: 0;
+            top: 0;
+            font-size: 1.2rem;
+        }
+
+        .image-container {
+            position: relative;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            transition: transform 0.4s ease;
+        }
+
+        .image-container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.2);
+        }
+
+        .image-container img {
+            width: 100%;
+            height: auto;
+            display: block;
+            transition: transform 0.4s ease;
+        }
+
+        .image-container:hover img {
+            transform: scale(1.05);
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 60px 80px;
+            background: linear-gradient(135deg, var(--color-dark) 0%, var(--color-primary) 100%);
+            color: var(--color-white);
+        }
+
+        footer .logo {
+            color: var(--color-white);
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        footer p {
+            font-size: 0.9rem;
+            color: var(--color-secondary);
+        }
+        
+        /* --- CHATBOT UI --- */
+        #chat-icon {
+            position: fixed;
+            bottom: 40px;
+            right: 40px;
+            background: var(--color-primary);
+            color: var(--color-white);
+            width: 65px;
+            height: 65px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 28px;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            animation: pulse 2s infinite;
+            transition: transform 0.3s ease;
+        }
+
+        #chat-icon:hover {
+            transform: scale(1.1);
+            animation: none;
+        }
+        
+        #chat-popup {
+            position: fixed;
+            bottom: 120px;
+            right: 40px;
+            width: 420px;
+            height: 600px;
+            background: var(--color-white);
+            border-radius: 20px;
+            box-shadow: 0 15px 50px rgba(0,0,0,0.25);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            z-index: 999;
+            transform: scale(0.95) translateY(30px);
+            opacity: 0;
+            pointer-events: none;
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.4s ease;
+        }
+        
+        #chat-popup.show {
+            transform: scale(1) translateY(0);
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        #chat-header {
+            background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-dark) 100%);
+            color: var(--color-white);
+            padding: 20px 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+        
+        #chat-header .title-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        #chat-header .robot-icon {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            background-color: var(--color-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 5px;
+            flex-shrink: 0;
+        }
+        
+        #chat-header .robot-icon svg {
+            width: 100%;
+            height: 100%;
+            fill: var(--color-primary);
+        }
+
+        #close-chat-btn {
+            background: none;
+            border: none;
+            color: var(--color-white);
+            font-size: 30px;
+            cursor: pointer;
+            line-height: 1;
+            opacity: 0.8;
+            transition: opacity 0.2s;
+        }
+
+        #close-chat-btn:hover {
+            opacity: 1;
+        }
+
+        #chat-box {
+            flex-grow: 1;
+            padding: 20px;
+            overflow-y: auto;
+            background-color: var(--color-light);
+            scroll-behavior: smooth;
+        }
+        
+        .message {
+            padding: 15px 20px;
+            border-radius: var(--chat-bubble-radius);
+            margin-bottom: 12px;
+            max-width: 85%;
+            line-height: 1.6;
+            word-wrap: break-word;
+            animation: bubble-pop-in 0.3s ease-out;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .message:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .bot-message {
+            background-color: var(--color-white);
+            color: var(--color-dark);
+            margin-right: auto;
+            border-bottom-left-radius: 5px;
+        }
+
+        .user-message {
+            background-color: var(--color-primary);
+            color: var(--color-white);
+            margin-left: auto;
+            border-bottom-right-radius: 5px;
+        }
+
+        .bot-message.loading {
+            display: flex;
+            align-items: center;
+        }
+
+        .bot-message.loading .dot {
+            width: 9px;
+            height: 9px;
+            margin: 0 3px;
+            background-color: var(--color-primary);
+            border-radius: 50%;
+            animation: typing 1.4s infinite;
+        }
+
+        .bot-message.loading .dot:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .bot-message.loading .dot:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        .error-message {
+            background-color: #fde8e8;
+            color: #d32f2f;
+            border: 1px solid #d32f2f;
+            margin-right: auto;
+        }
+
+        #suggestion-chips-container {
+            padding: 0 20px 15px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            background-color: var(--color-light);
+        }
+
+        .suggestion-chip {
+            background-color: var(--color-white);
+            color: var(--color-primary);
+            border: 1px solid var(--color-secondary);
+            border-radius: 25px;
+            padding: 10px 16px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .suggestion-chip:hover {
+            background-color: var(--color-secondary);
+            color: var(--color-white);
+            border-color: var(--color-primary);
+            transform: translateY(-2px);
+            box-shadow: 0 2px 8px rgba(31, 117, 254, 0.1);
+        }
+
+        #chat-input-area {
+            padding: 15px 20px;
+            background-color: var(--color-white);
+            border-top: 1px solid #e0e0e0;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        #user-input {
+            flex-grow: 1;
+            border: 1px solid #ccc;
+            border-radius: 25px;
+            padding: 12px 18px;
+            font-size: 15px;
+            outline: none;
+            transition: all 0.3s ease;
+            background-color: var(--color-light);
+            color: var(--color-dark);
+        }
+
+        #user-input:focus {
+            border-color: var(--color-primary);
+            box-shadow: 0 0 0 3px rgba(31, 117, 254, 0.2);
+        }
+
+        #send-btn {
+            background: var(--color-primary);
+            border: none;
+            color: var(--color-white);
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        #send-btn:hover {
+            background: var(--color-dark);
+            transform: scale(1.05);
+        }
+
+        /* New Contact Form Styles */
+        .contact-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            max-width: 500px;
+            margin: auto;
+            padding: 20px;
+        }
+
+        .contact-form .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .contact-form label {
+            font-size: 1rem;
+            font-weight: 500;
+            color: var(--color-dark);
+            margin-bottom: 8px;
+        }
+
+        .contact-form input,
+        .contact-form textarea {
+            width: 100%;
+            padding: 15px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            font-family: var(--font-sans);
+            font-size: 1rem;
+            color: var(--color-dark);
+            background-color: var(--color-white);
+            transition: all 0.3s ease;
+        }
+
+        .contact-form input::placeholder,
+        .contact-form textarea::placeholder {
+            color: #aaa;
+        }
+
+        .contact-form input:focus,
+        .contact-form textarea:focus {
+            outline: none;
+            border-color: var(--color-primary);
+            box-shadow: 0 0 0 3px rgba(31, 117, 254, 0.2);
+        }
+
+        .contact-form textarea {
+            resize: vertical;
+            min-height: 150px;
+        }
+
+        .contact-form .cta-button {
+            width: 100%;
+            border: none;
+            cursor: pointer;
+            text-align: center;
+        }
+
+
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            nav { padding: 15px 30px; }
+            .nav-links { gap: 25px; }
+            header h1 { font-size: 4rem; }
+            header p { font-size: 1.2rem; }
+            main { padding: 80px 40px; }
+            section {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+            .text-content, .image-content, .alt-section .text-content, .alt-section .image-content { padding: 0; }
+            .alt-section h2::after { left: 0; right: auto; }
+            .image-container { max-width: 600px; margin: auto; }
+            #chat-popup { width: calc(100vw - 40px); right: 20px; }
+            #chat-icon { right: 20px; bottom: 20px; }
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                flex-direction: column;
+                padding: 15px 20px;
+            }
+            .nav-links { margin-top: 10px; }
+            header { height: 70vh; }
+            header h1 { font-size: 3rem; }
+            header p { font-size: 1rem; }
+            main { padding: 60px 20px; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Section (Hero) -->
+    <header id="home">
+        <div class="header-bg-animation"></div>
+        <div class="content">
+            <h1>Blue Guardian</h1>
+            <p style="color: white;">Your AI Guide for Water Conservation and Sanitation</p>
+            <a href="#about" class="cta-button">Learn More</a>
+        </div>
+    </header>
+
+    <!-- Navigation Bar -->
+    <nav>
+        <a href="#home" class="logo">
+            <i class="fas fa-water logo-icon"></i>
+            <span>Blue Guardian</span>
+        </a>
+        <ul class="nav-links">
+            <li><a href="#about">About</a></li>
+            <li><a href="#services">Services</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        <!-- About Section -->
+        <section id="about">
+            <div class="text-content">
+                <h2>Our Mission</h2>
+                <p>Empowering communities with intelligent water solutions. We leverage AI to monitor water quality, predict resource availability, and promote sustainable sanitation practices.</p>
+                <a href="#services" class="cta-button">See Our Work</a>
+            </div>
+            <div class="image-content">
+                <div class="image-container">
+                    <img src="6.jpg" alt="Water monitoring station">
+                </div>
+            </div>
+        </section>
+
+        <!-- Services Section -->
+        <section id="services" class="alt-section">
+            <div class="image-content">
+                <div class="image-container">
+                    <img src="2.jpg" alt="AI powered solutions">
+                </div>
+            </div>
+            <div class="text-content">
+                <h2>Our Services</h2>
+                <p>From predictive analysis to real-time alerts, we provide a suite of tools designed to protect and preserve our most vital resource.</p>
+                <ul class="feature-list">
+                    <li>AI-Powered Water Quality Analysis</li>
+                    <li>Predictive Water Availability Forecasts</li>
+                    <li>Sustainable Sanitation System Planning</li>
+                    <li>Community Engagement and Education</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact">
+            <div class="text-content">
+                <h2>Get in Touch</h2>
+                <p>Have a question or a suggestion for Blue Guardian? We'd love to hear from you. Fill out the form below, and our team will get back to you as soon as possible.</p>
+            </div>
+            <div class="image-content">
+                <form class="contact-form">
+                    <div class="form-group">
+                        <label for="name">Name</label>
+                        <input type="text" id="name" name="name" placeholder="Your Name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" placeholder="Your Email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="message">Message</label>
+                        <textarea id="message" name="message" placeholder="Your Message" rows="6"></textarea>
+                    </div>
+                    <button type="submit" class="cta-button">Send Message</button>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer Section -->
+    <footer>
+        <a href="#home" class="logo">
+            <i class="fas fa-water logo-icon"></i>
+            <span>Blue Guardian</span>
+        </a>
+        <p>&copy; 2024 Blue Guardian. All rights reserved.</p>
+    </footer>
+    
+    <!-- Chatbot UI -->
+    <div id="chat-icon">
+        <i class="fas fa-comment-dots"></i>
+    </div>
+    
+    <div id="chat-popup">
+        <div id="chat-header">
+            <div class="title-container">
+                <div class="robot-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Pro 6.0.0-beta3 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. --><path d="M256 32C153.8 32 64 121.8 64 224c0 47.9 16.9 91.9 45.4 127.3l-28.7 86.1c-1.7 5-2.7 10.4-2.7 16.1c0 19.3 15.6 35 35 35c8 0 15.5-2.7 21.4-7.8l56.5-47.1c11.9 3.5 24.5 5.5 37.7 5.5c102.2 0 192-89.8 192-192S358.2 32 256 32z"/></svg>
+                </div>
+                Aquabot
+            </div>
+            <button id="close-chat-btn">&times;</button>
+        </div>
+        <div id="chat-box">
+            <!-- Messages will be appended here -->
+        </div>
+        <div id="suggestion-chips-container">
+            <!-- Suggestion chips will be dynamically added here -->
+        </div>
+        <div id="chat-input-area">
+            <input type="text" id="user-input" placeholder="Type a message...">
+            <button id="send-btn"><i class="fas fa-paper-plane"></i></button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const chatIcon = document.getElementById('chat-icon');
+            const chatPopup = document.getElementById('chat-popup');
+            const closeChatBtn = document.getElementById('close-chat-btn');
+            const chatBox = document.getElementById('chat-box');
+            const userInput = document.getElementById('user-input');
+            const sendBtn = document.getElementById('send-btn');
+            const suggestionContainer = document.getElementById('suggestion-chips-container');
+            const chatbotMessages = [
+                "Hello! Welcome to Blue Guardian. I'm here to answer your questions about water conservation and our services. What can I help you with today?",
+            ];
+            const suggestionChips = [
+                "What are your services?",
+                "How does the AI work?",
+                "Tell me more about Blue Guardian",
+                "How can I help with water conservation?",
+            ];
+
+            function addBotMessage(message) {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = 'message bot-message';
+                messageDiv.textContent = message;
+                chatBox.appendChild(messageDiv);
+                chatBox.scrollTop = chatBox.scrollHeight;
+            }
+
+            function addUserMessage(message) {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = 'message user-message';
+                messageDiv.textContent = message;
+                chatBox.appendChild(messageDiv);
+                chatBox.scrollTop = chatBox.scrollHeight;
+            }
+            
+            function showTypingIndicator() {
+                const typingIndicator = document.createElement('div');
+                typingIndicator.className = 'message bot-message loading';
+                typingIndicator.innerHTML = '<div class="dot"></div><div class="dot"></div><div class="dot"></div>';
+                chatBox.appendChild(typingIndicator);
+                chatBox.scrollTop = chatBox.scrollHeight;
+                return typingIndicator;
+            }
+
+            function removeTypingIndicator(indicator) {
+                if (indicator && indicator.parentNode) {
+                    indicator.parentNode.removeChild(indicator);
+                }
+            }
+
+            function addInitialBotMessage() {
+                addBotMessage(chatbotMessages[0]);
+                populateSuggestionChips();
+            }
+
+            function populateSuggestionChips() {
+                suggestionContainer.innerHTML = '';
+                suggestionChips.forEach(chipText => {
+                    const chip = document.createElement('button');
+                    chip.className = 'suggestion-chip';
+                    chip.textContent = chipText;
+                    chip.addEventListener('click', () => {
+                        userInput.value = chipText;
+                        handleSendMessage();
+                    });
+                    suggestionContainer.appendChild(chip);
+                });
+            }
+
+            // Simulating an AI response
+            async function sendMessageToAI(message) {
+                addUserMessage(message);
+                const typingIndicator = showTypingIndicator();
+                
+                // Here, you would call the Gemini API
+                // For this example, we'll use a placeholder response
+                const prompt = message;
+                
+                let chatHistory = [];
+                chatHistory.push({ role: "user", parts: [{ text: prompt }] });
+                const payload = { contents: chatHistory };
+                const apiKey = "";
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
+                
+                let responseText = "I'm sorry, I don't have enough information to answer that right now. Please try a different query.";
+
+                try {
+                    let response;
+                    for (let i = 0; i < 3; i++) { // Exponential backoff with 3 retries
+                        try {
+                            response = await fetch(apiUrl, {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify(payload)
+                            });
+                            if (response.status !== 429) break; // Break on success or non-rate limit error
+                            await new Promise(resolve => setTimeout(resolve, Math.pow(2, i) * 1000));
+                        } catch (error) {
+                            console.error(`Fetch attempt ${i + 1} failed:`, error);
+                            if (i === 2) throw error;
+                            await new Promise(resolve => setTimeout(resolve, Math.pow(2, i) * 1000));
+                        }
+                    }
+
+                    if (response && response.ok) {
+                        const result = await response.json();
+                        if (result.candidates && result.candidates.length > 0 &&
+                            result.candidates[0].content && result.candidates[0].content.parts &&
+                            result.candidates[0].content.parts.length > 0) {
+                            responseText = result.candidates[0].content.parts[0].text;
+                        }
+                    } else {
+                        throw new Error(`API error: ${response ? response.status : 'No response'}`);
+                    }
+                } catch (error) {
+                    console.error("Failed to get response from AI:", error);
+                    responseText = "Oops! Something went wrong. Please try again later.";
+                }
+
+                removeTypingIndicator(typingIndicator);
+                addBotMessage(responseText);
+                populateSuggestionChips(); // Refresh suggestions after each conversation turn
+            }
+
+            function handleSendMessage() {
+                const message = userInput.value.trim();
+                if (message) {
+                    sendMessageToAI(message);
+                    userInput.value = '';
+                }
+            }
+
+            sendBtn.addEventListener('click', handleSendMessage);
+            userInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    handleSendMessage();
+                }
+            });
+
+            chatIcon.addEventListener('click', () => {
+                chatPopup.classList.toggle('show');
+                if (chatPopup.classList.contains('show')) {
+                    if (chatBox.children.length === 0) {
+                       addInitialBotMessage();
+                    }
+                    userInput.focus();
+                }
+            });
+
+            closeChatBtn.addEventListener('click', () => {
+                chatPopup.classList.remove('show');
+            });
+
+            // Smooth scrolling for navigation links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    document.querySelector(this.getAttribute('href')).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                });
+            });
+
+        });
+    </script>
+
+</body>
+</html>
